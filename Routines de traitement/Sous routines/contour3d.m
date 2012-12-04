@@ -1,0 +1,109 @@
+function [ h ] = contour3d( p,vect )
+%CONTOUR3d Summary of this function goes here
+%   This function enables to plot a graph object, output argument of the
+%   plotedges function with the 3d calculation enalbed.
+% "p" is the graph object
+% "vect" is an optional vector containing the levels of the contour.
+
+% See also plotedges
+
+%% Get the input args
+
+if nargin==1    
+    v=[20,60,120,180,240,320];
+elseif nargin==2
+    v=vect;
+else
+    error('wrong number of input arguments');
+end
+
+
+%% Prepare the plot for the contour plot (code taken from the 'polar' function of built-in MATLAB toolbox)
+    annotates=0;
+    cax=newplot;
+    
+    % get x-axis text color so grid is in same color
+    tc = get(cax, 'XColor');
+    ls = get(cax, 'GridLineStyle');
+    
+    % make a radial grid
+    hold(cax, 'on');
+    
+    % Define the same grid for every representation :
+    rmin=0;
+    rmax=1.5;
+    rticks=3;
+    set(cax, 'DataAspectRatio', [1, 1, 1]);
+
+    % define a circle
+    th = 0 : pi / 50 : 2 * pi;
+    xunit = cos(th);
+    yunit = sin(th);
+    % now really force points on x/y axes to lie on them exactly
+    inds = 1 : (length(th) - 1) / 4 : length(th);
+    xunit(inds(2 : 2 : 4)) = zeros(2, 1);
+    yunit(inds(1 : 2 : 5)) = zeros(3, 1);
+    % plot background if necessary
+    if ~ischar(get(cax, 'Color'))
+        patch('XData', xunit * rmax, 'YData', yunit * rmax, ...
+            'EdgeColor', 'w', 'FaceColor', get(cax, 'Color'), ...
+            'HandleVisibility', 'off', 'Parent', cax);
+    end
+
+    % draw radial circles
+    c45 = cos(-45 * pi / 180);
+    s45 = sin(-45 * pi / 180);
+    rinc = (rmax - rmin) / rticks;
+    for j = [0.5,1.5,1]
+        hhh = line(xunit * j, yunit * j, 'LineStyle', ls, 'Color', tc, 'LineWidth', 1, ...
+            'HandleVisibility', 'off', 'Parent', cax);
+        text((j + rinc / 20) * c45, (j + rinc / 20) * s45, ...
+            ['' num2str(j)], 'VerticalAlignment', 'top', ...
+            'HandleVisibility', 'off', 'Parent', cax);
+    end
+    set(hhh, 'LineStyle', '-'); % Make last circle solid
+
+    % plot spokes
+    th = (1 : 6) * 2 * pi / 12;
+    cst = cos(th);
+    snt = sin(th);
+    cs = [-cst; cst];
+    sn = [-snt; snt];
+    line(rmax * cs, rmax * sn, 'LineStyle', ls, 'Color', tc, 'LineWidth', 1, ...
+        'HandleVisibility', 'off', 'Parent', cax);
+
+    % annotate spokes in degrees
+    if annotates
+        rt = 1.1 * rmax;
+        for i = 1 : length(th)
+            text(rt * cst(i), rt * snt(i), int2str(i * 30),...
+                'HorizontalAlignment', 'center', ...
+                'HandleVisibility', 'off', 'Parent', cax);
+            if i == length(th)
+                loc = int2str(0);
+            else
+                loc = int2str(180 + i * 30);
+            end
+            text(-rt * cst(i), -rt * snt(i), loc, 'HorizontalAlignment', 'center', ...
+                'HandleVisibility', 'off', 'Parent', cax);
+        end
+    end
+    
+    %% Plot the contour
+    contour(p.z.x, p.z.y, p.z.totz,v,'Fill','off');
+    colormap hsv;
+    caxis([v(1) v(end)]);
+    colorbar('Ytick',v);
+    
+    % Text the number of hillocks represented
+    text(0,1.7,[num2str(p.z.N_h3d) ' hillocks have been piled'], ...
+        'HorizontalAlignment', 'Center', 'VerticalAlignment', 'Middle');
+
+    
+    %% Add last circle if necessary
+     set(gca,'XLimMode','manual')
+    hhh = line(xunit * 2, yunit * 2, 'LineStyle', ls, 'Color', tc, 'LineWidth', 1, ...
+            'HandleVisibility', 'off', 'Parent', gca);
+
+end
+

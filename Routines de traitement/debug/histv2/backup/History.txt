@@ -1,0 +1,6 @@
+These three functions have been part of the "histv2" project, in chronological order. v2<v3<v4.
+The final version, which has been finally renanmed officially "histv2" is the file histv4.
+The difference between these three files lies in the way to treat the bundaries of the sample :
+histv2 considers only the points whose window are completely included in the range of the data. The reduced interval is then filled with points spaced with L/b.
+histv3 considers all the b points and count always with the big window width, even when the window sticks out the boundaries. 
+histv4 considers all the b points + renormalizes the extreme points with the ratio : (big window width)/(real window width).

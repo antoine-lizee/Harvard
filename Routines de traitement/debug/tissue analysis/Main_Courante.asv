@@ -1,0 +1,31 @@
+
+
+figure(1);
+clf
+plot(originaltissue2_1,'-x','Linewidth',2,'num', 'MarkerSize',4);
+axis equal;
+figure(2); clf
+p11=plotedges(originaltissue2_1,'low');
+figure(3); clf
+p12=plotedges(originaltissue2_1,'low','edgeswithangles');
+
+
+Debug : 
+clf
+load('Microsorum1_1-treated')
+plot(originaltissue,'num');
+axis equal
+
+for i=1:length(originaltissue.c)
+    M=findcarac(originaltissue,i);
+
+    %display([M.I_e M.I_v M.a_e M.xy M.l_e M.R_e M.r_e M.T M.N M.CV M.C])
+
+    testp=[M.C, M.R_e, M.r_e, M.alpha];
+    testp(isinf(testp(:,1)),:)=[];
+    hold on
+    plot(testp(:,1),testp(:,2),'or');
+    for j=1:size(testp,1)
+        fnplt(rsmak('arc',testp(j,3),testp(j,1:2),testp(j,5:6)));
+    end
+end
