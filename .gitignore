@@ -1,7 +1,20 @@
-*.pdf
 *.asv
+*.docx
+*.pdf
 essais export/
-/Rapport
 /sorties
 /soutenance
 *.zip
+/Rapport/*
+		#Excludes the contents of /Rapport
+!/Rapport/manuscrit*/
+		#Includes the subfolder
+/Rapport/manuscrit*/*
+		#Excludes the content of the subfolder	
+!/Rapport/manuscrit*/*2.pdf
+		#Must come after the deletion of all pdfs !
+!/Rapport/manuscrit*/*xp*/
+/Rapport/manuscrit*/*xp*/*
+!/Rapport/manuscrit*/*xp*/*.pdf
+#!rapport*.pdf
+#One cannot add files in the cache (or commited) if they are ignored. EXCEPT if the -f (force) option is specified when using 'git add'
