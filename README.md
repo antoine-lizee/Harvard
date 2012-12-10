@@ -7,7 +7,7 @@ The code is written and directly executable in MATLAB. All the code that is outs
 
 Here is one graph extracted from this report that explain the architecture of the program that computes the division planes of a cell with a given geometry:
 
-![Unable to display...](ProgI_architecture.bmp)
+![Unable to display...](https://github.com/antoine-lizee/Harvard/blob/master/ProgI_architecture.png)
 
 Please contact me prior to any use or edition of the code.
 
